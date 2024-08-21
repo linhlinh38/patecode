@@ -1,0 +1,118 @@
+<!-- <html>
+<title>This is index.html</title>
+
+
+<body>
+    <h1>Index.html</h1>
+    <p>This is the contents of this file</p>
+    </body>
+
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <style>
+      #username {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+
+      #username.invalid {
+        background-color: #f00;
+        color: #fff;
+      }
+
+      #password {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 5px;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #password.valid {
+        background-color: #fff;
+        opacity: 1;
+        cursor: default;
+      }
+
+      #login-btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #login-btn.enabled {
+        opacity: 1;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Login</h1>
+    <form id="login-form" action="/login" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" autofocus />
+      <br />
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" disabled />
+      <br />
+      <button type="submit" id="login-btn" disabled>Login</button>
+    </form>
+
+    <script>
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.getElementById("password");
+      const loginButton = document.getElementById("login-btn");
+      const loginForm = document.getElementById("login-form");
+
+      usernameInput.addEventListener("input", (event) => {
+        const username = event.target.value;
+        passwordInput.classList.remove("valid");
+        if (username) {
+          // Simulate username validation (replace with your actual logic on server)
+          const isValidUsername = username === "admin";
+          console.log("isValidUsername", isValidUsername);
+          if (!isValidUsername) {
+            username.select();
+          } else {
+            passwordInput.addEventListener("onBlur", () => {
+              passwordInput.disabled = false;
+            });
+          }
+          //usernameInput.classList.toggle("invalid", !isValidUsername);
+        } else {
+          usernameInput.classList.remove("invalid");
+          passwordInput.disabled = true;
+        }
+      });
+
+      passwordInput.addEventListener("input", (event) => {
+        const password = event.target.value;
+
+        if (password) {
+          // Simulate password validation (replace with your actual logic on server)
+          const isValidPassword = password === "123456"; // Replace with actual validation
+
+          passwordInput.classList.toggle("valid", isValidPassword);
+          loginButton.disabled = !(
+            usernameInput.classList.contains("invalid") || !isValidPassword
+          );
+        } else {
+          passwordInput.classList.remove("valid");
+          loginButton.disabled = true;
+        }
+      });
+
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent form submission (handled by server now)
+      });
+    </script>
+  </body>
+</html>
