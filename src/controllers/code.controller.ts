@@ -3,6 +3,7 @@ import { ICodes } from "../interfaces/code.interface";
 import { codeService } from "../services/code.service";
 import { encryptedPassword } from "../utils/jwt";
 import { AuthRequest } from "../middleware/authentication";
+import bcrypt from "bcrypt";
 async function createCode(req: Request, res: Response, next: NextFunction) {
   const newCode: ICodes = {
     title: req.body.title,
@@ -42,7 +43,33 @@ async function getCodeById(
 ) {
   try {
     const code = await codeService.getById(req.params.id);
-    return res.status(200).json({ code: code });
+    if (code.isUsepassword) {
+      return res.status(200).json({ requiredPass: true, code: null });
+    } else {
+      return res.status(200).json({ requiredPass: false, code: code });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function validatePasswordGetCode(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id, password } = req.body;
+    const code = await codeService.getById(id);
+    if (!code) {
+      return res.status(404).json({ message: "Code not found!" });
+    }
+    const isMatch = await bcrypt.compare(password, code.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    } else {
+      return res.status(200).json({ code: code });
+    }
   } catch (error) {
     next(error);
   }
@@ -52,4 +79,5 @@ export const codeController = {
   createCode,
   getAllCodeOfMember,
   getCodeById,
+  validatePasswordGetCode,
 };

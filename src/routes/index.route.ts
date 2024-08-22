@@ -24,4 +24,5 @@ route
 route.post("/code/create", codeController.createCode);
 route.get("/code/me", authentication, codeController.getAllCodeOfMember);
 route.get("/code/get/:id", codeController.getCodeById);
+route.post("/code/validate", codeController.validatePasswordGetCode);
 export default route;
