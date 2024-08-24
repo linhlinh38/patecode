@@ -16,8 +16,11 @@ async function createCode(req: Request, res: Response, next: NextFunction) {
   };
   try {
     newCode.password = await encryptedPassword(req.body.password);
-    await codeService.create(newCode);
-    return res.status(201).json({ message: "Created Code Successfully" });
+    const code = await codeService.create(newCode);
+    return res.status(201).json({
+      message: "Created Code Successfully",
+      link: `http://localhost:3000/snippet/${code._id}`,
+    });
   } catch (error) {
     next(error);
   }

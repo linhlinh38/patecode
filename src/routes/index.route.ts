@@ -21,7 +21,7 @@ route
   .route("/members/changePassword")
   .post(authentication, memberController.changePassword);
 
-route.post("/code/create", codeController.createCode);
+route.post("/code/create", authentication, codeController.createCode);
 route.get("/code/me", authentication, codeController.getAllCodeOfMember);
 route.get("/code/get/:id", codeController.getCodeById);
 route.post("/code/validate", codeController.validatePasswordGetCode);
