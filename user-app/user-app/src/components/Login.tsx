@@ -5,32 +5,34 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 interface LoginCredentials {
-  memberName: string;
+  email: string;
   password: string;
 }
 
 const Login: React.FC<{
-  onLogin: (credentials: LoginCredentials) => Promise<void>;
+  onLogin: (credentials: LoginCredentials) => Promise<string | null>;
 }> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
-    memberName: yup.string().required("Member Name is required"),
+    email: yup.string().required("Email is required"),
     password: yup.string().required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      memberName: "",
+      email: "",
       password: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await onLogin(values);
-        navigate("/home");
-        setErrorMessage(null);
+        const resss = await onLogin(values);
+        if (resss) {
+          navigate("/home");
+          setErrorMessage(null);
+        }
       } catch (error) {
         setErrorMessage("Login failed. Please check your credentials.");
       }
@@ -59,13 +61,13 @@ const Login: React.FC<{
               htmlFor="email"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              Member Name
+              Email
             </label>
             <div className="mt-2">
               <input
-                {...formik.getFieldProps("memberName")}
-                id="memberName"
-                name="memberName"
+                {...formik.getFieldProps("email")}
+                id="email"
+                name="email"
                 type="text"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -92,6 +94,13 @@ const Login: React.FC<{
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
+            <p className=" text-right text-gray-500">
+              <Link to={"/members/forgot-pwd"}>
+                <span className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  Forgot password?
+                </span>
+              </Link>
+            </p>
           </div>
 
           <div>

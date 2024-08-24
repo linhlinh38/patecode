@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
-import UserList from "./components/UserList";
-import UserForm from "./components/UserForm";
 import axios from "axios";
 import { Alert } from "@mui/material";
 import UpdateUser from "./components/UpdateForm";
 import "./App.css";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
-import WatchDetail from "./components/WatchDetail";
 import NotFound from "./components/404";
 import Forbidden from "./components/403";
 import Unauthenticate from "./components/401";
-import CreateBrand from "./components/createBrand";
-import UpdateBrand from "./components/updateBrand";
-import CreateWatch from "./components/createWatch";
-import UpdateWatch from "./components/updateWatch";
+
 import ResetPassword from "./components/resetPassword";
 import Register from "./components/register";
 import Profile from "./components/profile";
-import Management from "./components/management";
+import ForgotPwd from "./components/ForgotPwd";
+import ResetPwd from "./components/resetPwd";
+import CreateSnippet from "./components/CreateSnippet";
+import ViewSnippet from "./components/ViewSnippet";
 
 interface User {
   _id: string;
@@ -37,8 +34,11 @@ interface AuthContextState {
 }
 
 interface LoginCredentials {
-  memberName: string;
+  email: string;
   password: string;
+}
+interface ForgotPwdCredentials {
+  email: string;
 }
 
 const App: React.FC = () => {
@@ -74,22 +74,37 @@ const App: React.FC = () => {
       setAccessToken(response.data.accessToken);
       setIsLoggedIn(true);
       localStorage.setItem("accessToken", response.data.accessToken);
+      console.log("response", response);
+
       if (response.data.accessToken) {
         const res = await axios.get("http://localhost:8080/member/info", {
           headers: {
             Authorization: `Bearer ${response.data.accessToken}`,
           },
         });
-
-        localStorage.setItem("isAdmin", res.data.member.isAdmin);
+        return response.data.accessToken;
       }
+    } catch (error) {
+      const errorMess = error as ErrorResponse;
+      console.error("Error fetching users:", errorMess.response.data.message);
+      handleError(errorMess.response.data.message || "An error occurred");
+      return null;
+    }
+  };
+  const handleRequestResetPwd = async (credentials: ForgotPwdCredentials) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/member/requestResetPassword",
+        credentials
+      );
+
+      return response.data;
     } catch (error) {
       const errorMess = error as ErrorResponse;
       console.error("Error fetching users:", errorMess.response.data.message);
       handleError(errorMess.response.data.message || "An error occurred");
     }
   };
-
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
     headers: { Authorization: accessToken ? `Bearer ${accessToken}` : "" },
@@ -101,14 +116,6 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/" element={<Navigate to={"/home"} />} />
-        <Route
-          path="/accounts"
-          element={
-            <Navbar>
-              <Management axiosInstance={axiosInstance} />
-            </Navbar>
-          }
-        />
 
         <Route
           path="/members/changePassword"
@@ -118,21 +125,6 @@ const App: React.FC = () => {
                 <ResetPassword
                   axiosInstance={axiosInstance}
                   isLoggedIn={isLoggedIn}
-                />{" "}
-              </Navbar>
-            ) : (
-              <Alert severity="error">Unauthenticate User</Alert>
-            )
-          }
-        />
-        <Route
-          path="/brands/create"
-          element={
-            isLoggedIn ? (
-              <Navbar>
-                <CreateBrand
-                  axiosInstance={axiosInstance}
-                  isLoggedIn={isLoggedIn}
                 />
               </Navbar>
             ) : (
@@ -141,20 +133,12 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/watchs/create"
+          path="/passwordReset"
           element={
-            isLoggedIn ? (
-              <Navbar>
-                <CreateWatch
-                  axiosInstance={axiosInstance}
-                  isLoggedIn={isLoggedIn}
-                />
-              </Navbar>
-            ) : (
-              <Alert severity="error">Unauthenticate User</Alert>
-            )
+            <ResetPwd axiosInstance={axiosInstance} isLoggedIn={isLoggedIn} />
           }
         />
+
         <Route
           path="/members/create"
           element={<Register axiosInstance={axiosInstance} />}
@@ -187,31 +171,31 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/brands/update/:id"
+          path="/members/CreateSnippet"
           element={
             isLoggedIn ? (
               <Navbar>
-                <UpdateBrand axiosInstance={axiosInstance} />
+                <CreateSnippet axiosInstance={axiosInstance} />
               </Navbar>
             ) : (
-              <Alert severity="error">Unauthenticate User</Alert>
+              <Navbar>
+                {" "}
+                <Unauthenticate />{" "}
+              </Navbar>
             )
           }
         />
         <Route
-          path="/watchs/update/:id"
+          path="/snippet/:snippetId"
           element={
-            isLoggedIn ? (
-              <Navbar>
-                <UpdateWatch
-                  axiosInstance={axiosInstance}
-                  isLoggedIn={isLoggedIn}
-                />{" "}
-              </Navbar>
-            ) : (
-              <Alert severity="error">Unauthenticate User</Alert>
-            )
+            <Navbar>
+              <ViewSnippet axiosInstance={axiosInstance} />
+            </Navbar>
           }
+        />
+        <Route
+          path="/members/forgot-pwd"
+          element={<ForgotPwd onRequestResetPwd={handleRequestResetPwd} />}
         />
 
         <Route
@@ -223,14 +207,6 @@ const App: React.FC = () => {
           }
         />
 
-        <Route
-          path="/watchDetail/:id"
-          element={
-            <Navbar>
-              <WatchDetail axiosInstance={axiosInstance} />{" "}
-            </Navbar>
-          }
-        />
         <Route
           path="/*"
           element={
