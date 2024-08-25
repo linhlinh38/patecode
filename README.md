@@ -9,7 +9,7 @@
 - Express
 - MongoDB
 
-### Frondend
+### Frontend
 
 - TypeScript
 - ReactJS
