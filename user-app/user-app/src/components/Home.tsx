@@ -84,10 +84,6 @@ const Home: React.FC<{ axiosInstance: AxiosInstance }> = ({
   const snippetColumns = useMemo<MRT_ColumnDef<CodeSnippet>[]>(
     () => [
       {
-        accessorKey: "_id",
-        header: "Id",
-      },
-      {
         accessorKey: "title",
         header: "Title",
       },

@@ -51,7 +51,7 @@ const ResetPassword: React.FC<{
         setErrorMessage(null);
         handleSuccess("Change Password Successful");
         formik.resetForm();
-        navigate("/");
+        navigate("/login");
       } catch (error) {
         setErrorMessage("Error Change Password. Please try again.");
         const errorMess = error as ErrorResponse;

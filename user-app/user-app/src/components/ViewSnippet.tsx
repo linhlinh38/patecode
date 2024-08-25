@@ -63,10 +63,10 @@ const ViewSnippet: React.FC<{
   const handleClose = () => {
     setOpen(false);
   };
-  const storedToken = localStorage.getItem("accessToken") || "";
-  const token = jwtDecode<{
-    member: string;
-  }>(storedToken);
+  // const storedToken = localStorage.getItem("accessToken") || "";
+  // const token = jwtDecode<{
+  //   member: string;
+  // }>(storedToken);
   const { snippetId } = useParams();
 
   const navigate = useNavigate();
@@ -134,7 +134,7 @@ const ViewSnippet: React.FC<{
         const formatData = {
           ...values,
           isUsepassword: values.password !== "",
-          member: token?.member,
+          member: '',
         };
         console.log("formatData", formatData);
 
