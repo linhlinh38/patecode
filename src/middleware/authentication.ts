@@ -15,13 +15,10 @@ const { SECRET_KEY_FOR_ACCESS_TOKEN } = config;
 
 const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  //Extract token from 'Bearer token' format
   const token = authHeader && authHeader.split(" ")[1];
-  //const token = req.cookies.accessToken;
 
   if (!token) {
     return res.status(401).json({ message: "Unauthentication" });
-    //res.render("401");
   }
 
   try {
@@ -32,12 +29,10 @@ const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
       next();
     } else {
       res.status(401).json({ message: "Invalid token" });
-      //res.render("401");
     }
   } catch (error) {
     console.error(error);
     res.status(401).json({ message: "Unauthentication" });
-    //res.render("401");
   }
 };
 

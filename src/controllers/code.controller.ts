@@ -4,6 +4,7 @@ import { codeService } from "../services/code.service";
 import { encryptedPassword } from "../utils/jwt";
 import { AuthRequest } from "../middleware/authentication";
 import bcrypt from "bcrypt";
+
 async function createCode(req: Request, res: Response, next: NextFunction) {
   const newCode: ICodes = {
     title: req.body.title,
@@ -39,11 +40,7 @@ async function getAllCodeOfMember(
   }
 }
 
-async function getCodeById(
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) {
+async function getCodeById(req: Request, res: Response, next: NextFunction) {
   try {
     const code = await codeService.getById(req.params.id);
     if (code.isUsepassword) {

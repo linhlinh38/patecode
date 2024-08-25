@@ -185,25 +185,4 @@ const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     </div>
   );
 };
-//  <AppBar position="static" sx={{ backgroundColor: '80ced6' }}>
-//       <Toolbar variant="dense">
-//         <Typography variant="h3" component="div" sx={{ mr: 2, flexGrow: 1 }} >
-//             <Link to="/">
-
-//           Backend Mock Project
-//             </Link>
-//         </Typography>
-
-//           <>
-//             <Button variant="contained" color="error" onClick={handleLogout}>
-//               Logout
-//             </Button>
-//           </>
-
-//             <><Button variant="contained" onClick={() => navigate('/login')}>
-//               Login
-//             </Button></>
-
-//       </Toolbar>
-//     </AppBar>
 export default Navbar;
