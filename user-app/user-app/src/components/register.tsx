@@ -3,7 +3,7 @@ import { Alert, Button, MenuItem, Select, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { AxiosInstance } from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
 interface Brand {
@@ -18,7 +18,7 @@ const Register: React.FC<{ axiosInstance: AxiosInstance }> = ({
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
-    memberName: yup.string().required("Member Name is required"),
+    email: yup.string().required("Member Name is required"),
     name: yup.string().required("Name is required"),
     yob: yup.number().required("Years Of Birth is required"),
     password: yup.string().required("Password is required"),
@@ -42,7 +42,7 @@ const Register: React.FC<{ axiosInstance: AxiosInstance }> = ({
 
   const formik = useFormik({
     initialValues: {
-      memberName: "",
+      email: "",
       name: "",
       yob: "",
       password: "",
@@ -102,22 +102,22 @@ const Register: React.FC<{ axiosInstance: AxiosInstance }> = ({
           >
             <div>
               <label
-                htmlFor="memberName"
+                htmlFor="email"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Member Name
+                Email
               </label>
               <div className="mt-2">
                 <input
-                  {...formik.getFieldProps("memberName")}
-                  id="memberName"
-                  name="memberName"
+                  {...formik.getFieldProps("email")}
+                  id="email"
+                  name="email"
                   type="text"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                {formik.touched.memberName && (
-                  <p className="text-red-500">{formik.errors.memberName} </p>
+                {formik.touched.email && (
+                  <p className="text-red-500">{formik.errors.email} </p>
                 )}
               </div>
             </div>
@@ -196,6 +196,16 @@ const Register: React.FC<{ axiosInstance: AxiosInstance }> = ({
                 Sign up
               </button>
             </div>
+            <p className="mt-10 text-center text-gray-500">
+              Already registered?{" "}
+              <Link to={"/login"}>
+                <span className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  {" "}
+                  Sign in{" "}
+                </span>
+              </Link>
+              to your account.
+            </p>
           </div>
         </div>
       </form>

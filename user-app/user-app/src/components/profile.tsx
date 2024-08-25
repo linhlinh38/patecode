@@ -12,7 +12,7 @@ interface LoginCredentials {
 
 interface Member {
   _id?: string;
-  memberName: string;
+  email: string;
   password: string;
   name: string;
   yob: number;
@@ -75,8 +75,8 @@ const Profile: React.FC<{ axiosInstance: AxiosInstance }> = ({ axiosInstance })=
                     />
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0 mb-3">
-                <dt className="text-sm font-medium leading-6 text-gray-900">Member name</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{member?.memberName}</dd>
+                <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{member?.email}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0 mb-3">
                 <dt className="text-sm font-medium leading-6 text-gray-900">Full name</dt>

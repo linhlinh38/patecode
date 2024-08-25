@@ -11,12 +11,11 @@ interface LoginCredentials {
 const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const storedToken = localStorage.getItem("accessToken");
-  const isAdmin = localStorage.getItem("isAdmin");
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    window.location.reload();
     navigate("/home");
   };
-  console.log("isAdmin", isAdmin);
 
   return (
     <div>
@@ -37,7 +36,7 @@ const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
             </svg>
           </label>
-          <input className="hidden" type="checkbox" id="menu-toggle" />
+          <input className="hidden" type="checkbox" id="menu-toggle" alt="df" />
 
           <div
             className="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1"
@@ -50,7 +49,7 @@ const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     className="inline-block no-underline hover:text-black hover:underline py-2 px-4"
                     href="/home"
                   >
-                    Shop
+                    My Snippet
                   </a>
                 </li>
                 <li>
@@ -61,16 +60,6 @@ const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     About
                   </a>
                 </li>
-                {isAdmin === "true" && (
-                  <li>
-                    <a
-                      className="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                      href="/accounts"
-                    >
-                      Management
-                    </a>
-                  </li>
-                )}
               </ul>
             </nav>
           </div>
@@ -89,7 +78,7 @@ const Navbar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               >
                 <path d="M5,22h14c1.103,0,2-0.897,2-2V9c0-0.553-0.447-1-1-1h-3V7c0-2.757-2.243-5-5-5S7,4.243,7,7v1H4C3.447,8,3,8.447,3,9v11 C3,21.103,3.897,22,5,22z M9,7c0-1.654,1.346-3,3-3s3,1.346,3,3v1H9V7z M5,10h2v2h2v-2h6v2h2v-2h2l0.002,10H5V10z" />
               </svg>
-              WATIME
+              PateCode
             </a>
           </div>
 
